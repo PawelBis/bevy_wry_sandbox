@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_wry::UrlResource;
 
 fn main() {
     App::new()
@@ -6,8 +7,10 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugins(bevy_wry::BevyWryPlugin {
             as_child: true,
-            url: Some("file:///Users/aoamne/Source/bevy_wry_sandbox/web/index.html".to_owned()),
-            html: None,
+            url: UrlResource::<0>(
+                "file:///Users/aoamne/Source/bevy_wry_sandbox/web/index.html".to_owned(),
+            ),
+            ..default()
         })
         .add_systems(Startup, setup)
         .run();
