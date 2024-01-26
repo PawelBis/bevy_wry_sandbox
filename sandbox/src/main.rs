@@ -8,7 +8,7 @@ fn main() {
         .add_plugins(bevy_wry::BevyWryPlugin {
             as_child: true,
             url: UrlResource::<0>(
-                "file:///Users/aoamne/Source/bevy_wry_sandbox/web/index.html".to_owned(),
+                "file:///Users/aoamne/Source/bevy_wry_sandbox/sandbox/web/index.html".to_owned(),
             ),
             ..default()
         })
