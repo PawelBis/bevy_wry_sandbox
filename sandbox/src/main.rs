@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_asm::BevyAsmPlugin;
 use bevy_wry::UrlResource;
 
 fn main() {
@@ -12,6 +13,7 @@ fn main() {
             ),
             ..default()
         })
+        .add_plugins(BevyAsmPlugin {})
         .add_systems(Startup, setup)
         .run();
 }

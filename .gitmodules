@@ -1,3 +1,6 @@
 [submodule "bevy_wry"]
 	path = bevy_wry
 	url = https://github.com/PawelBis/bevy_wry
+[submodule "bevy_asm"]
+	path = bevy_asm
+	url = https://github.com/PawelBis/bevy_asm
