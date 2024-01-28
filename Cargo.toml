@@ -2,5 +2,5 @@
 members = [
     "bevy_wry",
     "bevy_asm",
-    "sandbox",
+    "bewry",
 ]
