@@ -11,7 +11,9 @@ fn main() {
             url: UrlResource("file:///Users/aoamne/Source/bewry/bewry/web/index.html".to_owned()),
             ..default()
         })
-        .add_plugins(BevyAsmPlugin {})
+        .add_plugins(BevyAsmPlugin {
+            use_in_memory_db: true,
+        })
         .add_systems(Startup, setup)
         .run();
 }
