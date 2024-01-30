@@ -8,7 +8,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugins(bevy_wry::BevyWryPlugin {
             as_child: true,
-            url: UrlResource("bewry/web/index.html".to_owned()),
+            url: UrlResource("file:///Users/aoamne/Source/bewry/bewry/web/index.html".to_owned()),
             ..default()
         })
         .add_plugins(BevyAsmPlugin {})
