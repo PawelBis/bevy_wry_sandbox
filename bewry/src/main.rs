@@ -7,7 +7,6 @@ fn main() {
         .insert_resource(ClearColor(Color::PURPLE))
         .add_plugins(DefaultPlugins)
         .add_plugins(bevy_wry::BevyWryPlugin {
-            as_child: true,
             url: UrlResource("http://localhost:5173".to_owned()),
             ..default()
         })
