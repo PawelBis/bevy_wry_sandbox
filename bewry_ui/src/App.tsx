@@ -1,35 +1,90 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+    DockviewDefaultTab,
+    DockviewReact,
+    DockviewReadyEvent,
+    IDockviewPanelHeaderProps,
+    IDockviewPanelProps,
+    IDockviewHeaderActionsProps,
+} from 'dockview';
+import './App.scss'
 
-function App() {
-  const [count, setCount] = useState(0)
+const components = {
+    default: (props: IDockviewPanelProps<{ title: string }>) => {
+        return (
+            <div
+                style={{
+                    height: '100%',
+                    overflow: 'auto',
+                    color: 'white',
+                    position: 'relative',
+                }}
+            >
+                <span
+                    style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%,-50%)',
+                        pointerEvents: 'none',
+                        fontSize: '42px',
+                        opacity: 0.5,
+                    }}
+                >
+                    {props.api.title}
+                </span>
+            </div>
+        );
+    },
+};
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+const DockviewDemo = (props: { theme?: string }) => {
+    const onReady = (event: DockviewReadyEvent) => {
+        const sceneTree = event.api.addPanel({
+            id: 'panel_1',
+            component: 'default',
+            title: 'Scene tree',
+        });
 
-export default App
+        const viewport = event.api.addPanel({
+            id: 'viewport',
+            component: 'default',
+            title: 'viewport',
+            position: {referencePanel: sceneTree, direction: 'right'},
+        });
+    viewport.params
+
+        event.api.addPanel({
+            id: 'panel_2',
+            component: 'default',
+            title: 'Properties',
+            position: { referencePanel: viewport, direction: 'right' },
+        });
+
+        event.api.addPanel({
+          id: 'panel_3',
+          component: 'default',
+          title: 'Asset browser',
+          position: {direction: 'below'},
+        });
+
+        event.api.addPanel({
+            id: 'Top panel',
+            component: 'default',
+            title: 'Top panel',
+            position: {direction:'above'}
+        })
+
+        sceneTree.api.setActive();
+    };
+
+    return (
+        <DockviewReact
+            singleTabMode='fullwidth'
+            components={components}
+            onReady={onReady}
+            className={props.theme || 'dockview-theme-abyss'}
+        />
+    );
+};
+
+export default DockviewDemo;
