@@ -9,7 +9,7 @@ import {
 import './App.scss'
 
 const components = {
-    default: (props: IDockviewPanelProps<{ title: string }>) => {
+  default: (props: IDockviewPanelProps<{ title: string, widht: number }>) => {
         return (
             <div
                 style={{
@@ -51,30 +51,35 @@ const DockviewDemo = (props: { theme?: string }) => {
             title: 'viewport',
             position: {referencePanel: sceneTree, direction: 'right'},
         });
-    viewport.params
 
-        event.api.addPanel({
+        const properties = event.api.addPanel({
             id: 'panel_2',
             component: 'default',
             title: 'Properties',
             position: { referencePanel: viewport, direction: 'right' },
         });
 
-        event.api.addPanel({
+
+        const assetBrowser = event.api.addPanel({
           id: 'panel_3',
           component: 'default',
           title: 'Asset browser',
           position: {direction: 'below'},
         });
 
-        event.api.addPanel({
+        const topPanel = event.api.addPanel({
             id: 'Top panel',
             component: 'default',
             title: 'Top panel',
             position: {direction:'above'}
         })
 
-        sceneTree.api.setActive();
+        sceneTree.api.setSize({width: 300});
+        properties.api.setSize({width: 300});
+        topPanel.api.setSize({height: 100});
+        assetBrowser.api.setSize({height: 300});
+
+        viewport.api.setActive();
     };
 
     return (
@@ -83,6 +88,7 @@ const DockviewDemo = (props: { theme?: string }) => {
             components={components}
             onReady={onReady}
             className={props.theme || 'dockview-theme-abyss'}
+            disableAutoResizing={true}
         />
     );
 };
