@@ -1,15 +1,12 @@
 import {
-    DockviewDefaultTab,
     DockviewReact,
     DockviewReadyEvent,
-    IDockviewPanelHeaderProps,
     IDockviewPanelProps,
-    IDockviewHeaderActionsProps,
 } from 'dockview';
 import './App.scss'
 
 const components = {
-  default: (props: IDockviewPanelProps<{ title: string, widht: number }>) => {
+  default: (props: IDockviewPanelProps<{ title: string }>) => {
         return (
             <div
                 style={{
@@ -35,6 +32,21 @@ const components = {
             </div>
         );
     },
+  viewport: (_: IDockviewPanelProps<{}>) => {
+        return (
+            <div
+                style={{
+                    height: '100%',
+                    overflow: 'auto',
+                    color: 'white',
+                    position: 'relative',
+                }}
+                className='viewport'
+            >
+
+            </div>
+        );
+    },
 };
 
 const DockviewDemo = (props: { theme?: string }) => {
@@ -47,7 +59,7 @@ const DockviewDemo = (props: { theme?: string }) => {
 
         const viewport = event.api.addPanel({
             id: 'viewport',
-            component: 'default',
+            component: 'viewport',
             title: 'viewport',
             position: {referencePanel: sceneTree, direction: 'right'},
         });
@@ -80,6 +92,22 @@ const DockviewDemo = (props: { theme?: string }) => {
         assetBrowser.api.setSize({height: 300});
 
         viewport.api.setActive();
+
+        let websocket = new WebSocket("ws://localhost:8876");
+        websocket.onopen = (_) => {
+
+          viewport.api.onDidDimensionsChange((e) => {
+            let str: string = e.width + "," + e.height;
+            websocket.send(str);
+          });
+        };
+
+        websocket.onmessage = (m) => {
+          console.log(m)
+        };
+
+        websocket.onerror = (e) => console.log(e);
+
     };
 
     return (

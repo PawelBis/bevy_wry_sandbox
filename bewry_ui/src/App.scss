@@ -4,6 +4,14 @@
   text-align: center;
 }
 
+.dockview-theme-abyss .dv-dockview {
+  background-color: transparent;
+}
+
+.grid-view .split-view-container .view-container {
+  background-color: transparent;
+}
+
 .group-control {
   .action {
     padding: 4px;
@@ -21,5 +29,7 @@
   }
 }
 
-
+.groupview:has(.viewport) {
+  background-color: transparent;
+}
 
