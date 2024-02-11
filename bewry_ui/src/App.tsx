@@ -97,8 +97,11 @@ const DockviewDemo = (props: { theme?: string }) => {
         websocket.onopen = (_) => {
 
           viewport.api.onDidDimensionsChange((e) => {
-            let str: string = e.width + "," + e.height;
-            websocket.send(str);
+            let msg: any = {
+              new_width: e.width,
+              new_height: e.height,
+            };
+            websocket.send(JSON.stringify(msg));
           });
         };
 
