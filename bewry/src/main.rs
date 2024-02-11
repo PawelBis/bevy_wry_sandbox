@@ -1,7 +1,7 @@
 use bevy::{prelude::*, render::camera::Viewport, utils};
 use bevy_asm::BevyAsmPlugin;
 use bevy_wry::UrlResource;
-use viewport::{EditorViewportCamera, update_viewport, EditorViewportUpdated};
+use viewport::{update_viewport, EditorViewportCamera, EditorViewportUpdated};
 
 mod viewport;
 
