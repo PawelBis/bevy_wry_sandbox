@@ -97,9 +97,19 @@ const DockviewDemo = (props: { theme?: string }) => {
         websocket.onopen = (_) => {
 
           viewport.api.onDidDimensionsChange((e) => {
+            let xPosition = sceneTree.api.width;
+            let yPosition = topPanel.api.height;
             let msg: any = {
-              new_width: e.width,
-              new_height: e.height,
+              ResizeViewport: {
+                new_position: {
+                  x: xPosition,
+                  y: yPosition,
+                },
+                new_size: {
+                  x: e.width,
+                  y: e.height,
+                },
+              }
             };
             websocket.send(JSON.stringify(msg));
           });

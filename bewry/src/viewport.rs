@@ -7,8 +7,8 @@ pub enum Error {
 
 #[derive(Resource, Default, Debug)]
 pub struct EditorViewportUpdated {
-    new_position: Option<UVec2>,
-    new_size: Option<UVec2>,
+    pub new_position: Option<UVec2>,
+    pub new_size: Option<UVec2>,
 }
 
 impl EditorViewportUpdated {

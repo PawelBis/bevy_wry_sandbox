@@ -1,6 +1,6 @@
 use bevy::{prelude::*, render::camera::Viewport, utils};
 use bevy_asm::BevyAsmPlugin;
-use bevy_wry::UrlResource;
+use bevy_wry::{UrlResource, websocket::MessageBus, types::EditorCommand};
 use viewport::{update_viewport, EditorViewportCamera, EditorViewportUpdated};
 
 mod viewport;
@@ -19,6 +19,7 @@ fn main() {
         })
         .add_systems(Startup, setup)
         .add_systems(Update, update_viewport.map(utils::error))
+        .add_systems(Update, consume_message_bus)
         .run();
 }
 
@@ -49,4 +50,24 @@ fn setup(mut commands: Commands) {
         },
         EditorViewportCamera,
     ));
+}
+
+fn consume_message_bus(
+    mut msg_bus: ResMut<MessageBus<EditorCommand>>,
+    mut viewport_updated: ResMut<EditorViewportUpdated>,
+) {
+    let mut msg_bus = msg_bus.lock().unwrap();
+    if let Some(msg) = msg_bus.last() {
+        match msg {
+            EditorCommand::ResizeViewport { new_position, new_size } => {
+
+                *viewport_updated = EditorViewportUpdated {
+                    new_position: *new_position,
+                    new_size: *new_size,
+                }
+            },
+        }
+    }
+
+    msg_bus.clear();
 }
