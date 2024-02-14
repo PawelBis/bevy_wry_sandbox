@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_wry::ScaleFactor;
 
 #[derive(Debug)]
 pub enum Error {
@@ -25,9 +26,11 @@ pub struct EditorViewportCamera;
 
 /// Reads EditorViewportResized events and updates viewport
 pub fn update_viewport(
+    scale_factor: Res<ScaleFactor>,
     mut viewport_resized_event: ResMut<EditorViewportUpdated>,
     mut q_viewport_camera: Query<&mut Camera, With<EditorViewportCamera>>,
 ) -> Result<(), Error> {
+    let scale_factor = scale_factor.as_f64();
     let mut camera = q_viewport_camera.single_mut();
     let viewport = camera
         .viewport
@@ -39,11 +42,17 @@ pub fn update_viewport(
         new_size,
     } = viewport_resized_event.try_consume();
     if let Some(new_position) = new_position {
-        viewport.physical_position = new_position;
+        let x = new_position.x as f64 * scale_factor;
+        let y = new_position.y as f64 * scale_factor;
+        let scaled_position = UVec2::new(x as u32, y as u32);
+        viewport.physical_position = scaled_position;
     }
 
     if let Some(new_size) = new_size {
-        viewport.physical_size = new_size;
+        let width = new_size.x as f64 * scale_factor;
+        let height = new_size.y as f64 * scale_factor;
+        let scaled_size = UVec2::new(width as u32, height as u32);
+        viewport.physical_size = scaled_size;
     }
 
     Ok(())

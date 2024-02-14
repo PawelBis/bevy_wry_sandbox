@@ -1,8 +1,10 @@
 use bevy::{prelude::*, render::camera::Viewport, utils};
 use bevy_asm::BevyAsmPlugin;
-use bevy_wry::{UrlResource, websocket::MessageBus, types::EditorCommand};
+use bevy_wry::websocket::MessageBus;
+use types::EditorCommand;
 use viewport::{update_viewport, EditorViewportCamera, EditorViewportUpdated};
 
+mod types;
 mod viewport;
 
 fn main() {
@@ -10,10 +12,9 @@ fn main() {
         .init_resource::<EditorViewportUpdated>()
         .insert_resource(ClearColor(Color::PURPLE))
         .add_plugins(DefaultPlugins)
-        .add_plugins(bevy_wry::BevyWryPlugin {
-            url: UrlResource("http://localhost:5173".to_owned()),
-            ..default()
-        })
+        .add_plugins(bevy_wry::BevyWryPlugin::<EditorCommand>::new(
+            "http://localhost:5173".to_owned(),
+        ))
         .add_plugins(BevyAsmPlugin {
             use_in_memory_db: true,
         })
@@ -59,13 +60,15 @@ fn consume_message_bus(
     let mut msg_bus = msg_bus.lock().unwrap();
     if let Some(msg) = msg_bus.last() {
         match msg {
-            EditorCommand::ResizeViewport { new_position, new_size } => {
-
+            EditorCommand::ResizeViewport {
+                new_position,
+                new_size,
+            } => {
                 *viewport_updated = EditorViewportUpdated {
                     new_position: *new_position,
                     new_size: *new_size,
                 }
-            },
+            }
         }
     }
 
