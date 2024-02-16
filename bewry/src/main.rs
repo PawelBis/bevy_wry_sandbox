@@ -20,7 +20,7 @@ fn main() {
         })
         .add_systems(Startup, setup)
         .add_systems(Update, update_viewport.map(utils::error))
-        .add_systems(Update, consume_message_bus)
+        .add_systems(Update, consume_events)
         .run();
 }
 
@@ -53,13 +53,12 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-fn consume_message_bus(
-    mut msg_bus: ResMut<MessageBus<EditorCommand>>,
+fn consume_events(
+    mut reader: EventReader<EditorCommand>,
     mut viewport_updated: ResMut<EditorViewportUpdated>,
 ) {
-    let mut msg_bus = msg_bus.lock().unwrap();
-    if let Some(msg) = msg_bus.last() {
-        match msg {
+    for event in reader.read() {
+        match event {
             EditorCommand::ResizeViewport {
                 new_position,
                 new_size,
@@ -71,6 +70,4 @@ fn consume_message_bus(
             }
         }
     }
-
-    msg_bus.clear();
 }
