@@ -58,16 +58,16 @@ fn consume_events(
     mut viewport_updated: ResMut<EditorViewportUpdated>,
 ) {
     for event in reader.read() {
-        match **event {
-            EditorCommand::ResizeViewport {
-                new_position,
-                new_size,
-            } => {
-                *viewport_updated = EditorViewportUpdated {
+        match &event {
+            InEvent::Text(t) => info!(t),
+            InEvent::Event(e) => match e {
+                EditorCommand::ResizeViewport {
                     new_position,
                     new_size,
+                } => {
+                    *viewport_updated = EditorViewportUpdated::new(*new_position, *new_size);
                 }
-            }
+            },
         }
     }
 }

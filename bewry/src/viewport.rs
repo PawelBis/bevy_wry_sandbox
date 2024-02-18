@@ -13,6 +13,13 @@ pub struct EditorViewportUpdated {
 }
 
 impl EditorViewportUpdated {
+    pub fn new(new_position: Option<UVec2>, new_size: Option<UVec2>) -> Self {
+        Self {
+            new_position,
+            new_size,
+        }
+    }
+
     fn try_consume(&mut self) -> Self {
         Self {
             new_position: self.new_position.take(),
