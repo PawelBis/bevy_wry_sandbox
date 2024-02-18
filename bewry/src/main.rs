@@ -1,6 +1,6 @@
 use bevy::{prelude::*, render::camera::Viewport, utils};
 use bevy_asm::BevyAsmPlugin;
-use bevy_wry::websocket::MessageBus;
+use bevy_wry::communication::InEvent;
 use types::EditorCommand;
 use viewport::{update_viewport, EditorViewportCamera, EditorViewportUpdated};
 
@@ -12,7 +12,7 @@ fn main() {
         .init_resource::<EditorViewportUpdated>()
         .insert_resource(ClearColor(Color::PURPLE))
         .add_plugins(DefaultPlugins)
-        .add_plugins(bevy_wry::BevyWryPlugin::<EditorCommand>::new(
+        .add_plugins(bevy_wry::SymmetricWryPlugin::<EditorCommand>::new(
             "http://localhost:5173".to_owned(),
         ))
         .add_plugins(BevyAsmPlugin {
@@ -54,18 +54,18 @@ fn setup(mut commands: Commands) {
 }
 
 fn consume_events(
-    mut reader: EventReader<EditorCommand>,
+    mut reader: EventReader<InEvent<EditorCommand>>,
     mut viewport_updated: ResMut<EditorViewportUpdated>,
 ) {
     for event in reader.read() {
-        match event {
+        match **event {
             EditorCommand::ResizeViewport {
                 new_position,
                 new_size,
             } => {
                 *viewport_updated = EditorViewportUpdated {
-                    new_position: *new_position,
-                    new_size: *new_size,
+                    new_position,
+                    new_size,
                 }
             }
         }

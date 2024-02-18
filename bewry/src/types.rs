@@ -1,7 +1,7 @@
 use bevy::prelude::{Event, UVec2};
-use serde::{Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize};
 
-#[derive(Debug, Clone, Deserialize, Event)]
+#[derive(Debug, Clone, Deserialize, Serialize, Event)]
 pub enum EditorCommand {
     ResizeViewport {
         #[serde(deserialize_with = "deserialie_new_size")]
