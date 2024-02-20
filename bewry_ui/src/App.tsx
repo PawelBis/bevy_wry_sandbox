@@ -129,7 +129,6 @@ const DockviewDemo = (props: { theme?: string }) => {
             components={components}
             onReady={onReady}
             className={props.theme || 'dockview-theme-abyss'}
-            disableAutoResizing={true}
         />
     );
 };

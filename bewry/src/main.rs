@@ -58,16 +58,24 @@ fn consume_events(
     mut viewport_updated: ResMut<EditorViewportUpdated>,
 ) {
     for event in reader.read() {
-        match &event {
-            InEvent::Text(t) => info!(t),
-            InEvent::Event(e) => match e {
-                EditorCommand::ResizeViewport {
-                    new_position,
-                    new_size,
-                } => {
-                    *viewport_updated = EditorViewportUpdated::new(*new_position, *new_size);
+        let command = match event {
+            InEvent::Text(t) => match serde_json::from_str::<EditorCommand>(&t) {
+                Ok(command) => command,
+                Err(_) => {
+                    info!("{t}");
+                    return;
                 }
             },
-        }
+            InEvent::Event(e) => e.clone(),
+        };
+
+        match command {
+            EditorCommand::ResizeViewport {
+                new_position,
+                new_size,
+            } => {
+                *viewport_updated = EditorViewportUpdated::new(new_position, new_size);
+            }
+        };
     }
 }

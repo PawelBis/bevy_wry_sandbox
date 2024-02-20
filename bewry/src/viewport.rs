@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_wry::ScaleFactor;
+use bevy_wry::webview::ScaleFactor;
 
 #[derive(Debug)]
 pub enum Error {
