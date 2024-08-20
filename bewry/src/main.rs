@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use bevy::render::camera::Viewport;
-use bevy_asm::BevyAsmPlugin;
 use bevy_wry::components::Anchor;
 use bevy_wry::events::{EmptyInEvent, WebViewEvent, CreateWebViewBuilder};
 
@@ -11,9 +10,6 @@ fn main() {
         .insert_resource(ClearColor(Color::PURPLE))
         .add_plugins(DefaultPlugins)
         .add_plugins(bevy_wry::BevyWryPlugin::<EmptyInEvent>::default())
-        .add_plugins(BevyAsmPlugin {
-            use_in_memory_db: true,
-        })
         .add_systems(Startup, setup)
         .run();
 }

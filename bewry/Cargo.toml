@@ -8,6 +8,5 @@ edition = "2021"
 [dependencies]
 bevy = "0.13"
 bevy_wry = {path = "../bevy_wry"}
-bevy_asm = {path = "../bevy_asm"}
 serde = "1.0"
 serde_json = "1.0"
